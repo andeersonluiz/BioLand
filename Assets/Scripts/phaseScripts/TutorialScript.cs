@@ -60,7 +60,7 @@ public class TutorialScript : MonoBehaviour {
         listText = new string[]{
             "Bem-vindo ao tutorial de BioLand, seu objetivo no jogo é descontaminar o ambiente do modo mais sustentável possível.",
             "Cada jogador começará com 300 BioCoins. Elas representam seus pontos de sustentabilidade no ambiente.",
-            "A cada 1% descontaminado você ganha 30 BioCoins e a cada 10 dias passados você perde 20 BioCoins.",
+            "A cada 1% descontaminado você ganha 20 BioCoins e a cada 10 dias passados você perde 20 BioCoins.",
             "Descontaminar é importante, mas fazer ela do modo mais eficiente é mais importante ainda.",
             "Agora vamos explicar cada componente do jogo.",
             "Aqui é exibido seu número de BioCoins. Quanto mais BioCoins tiver, melhor a sustentabilidade do ambiente.",        

@@ -41,15 +41,15 @@ public class ScenesManager : MonoBehaviour
     {
 
         listBacterias = new Bacteria[]{
-            new Bacteria (0, "Agromyces sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Diesel},0.000001f), 
-            new Bacteria (1, "Arthrobacter sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Diesel},0.000002f), 
-            new Bacteria (2, "Bacillus sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Biodiesel},0.0000024f), 
-            new Bacteria (3, "Burkholderia sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Biodiesel},0.0000024f), 
-            new Bacteria (4, "Cupriavidus sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Diesel},0.000001f), 
-            new Bacteria (5, "Lysobacter sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Diesel},0.000001f), 
-            new Bacteria (6, "Micrococcus sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Nothing},0.000002f), 
-            new Bacteria (7, "Sinomonas sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Diesel},0.000001f), 
-            new Bacteria (8, "Staphylococcus sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Biodiesel},0.0000024f)
+            new Bacteria (0, "Agromyces sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Diesel},0.000001f/2.5f), 
+            new Bacteria (1, "Arthrobacter sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Diesel},0.000002f/2.5f), 
+            new Bacteria (2, "Bacillus sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Biodiesel},0.0000024f/2.5f), 
+            new Bacteria (3, "Burkholderia sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Biodiesel},0.0000024f/2.5f), 
+            new Bacteria (4, "Cupriavidus sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Diesel},0.000001f/2.5f), 
+            new Bacteria (5, "Lysobacter sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Diesel},0.000001f/2.5f), 
+            new Bacteria (6, "Micrococcus sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Nothing},0.000002f/2.5f), 
+            new Bacteria (7, "Sinomonas sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Diesel},0.000001f/2.5f), 
+            new Bacteria (8, "Staphylococcus sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Biodiesel},0.0000024f/2.5f)
         };
         phasesManager = FindObjectOfType<PhasesManager> ();
         sm_instance = this;
@@ -120,8 +120,12 @@ public class ScenesManager : MonoBehaviour
        
         
     }
+	bool clicked=true;
     public void changeSceneAfterTutorial(string name){
-        StartCoroutine(changeSceneAfterTutorialAsync(name));
+		if(clicked){
+			StartCoroutine(changeSceneAfterTutorialAsync(name));
+			clicked=false;
+		}
     }
     IEnumerator changeSceneAfterTutorialAsync(string sceneName){
                     print("changing scene...2 "+sceneName );

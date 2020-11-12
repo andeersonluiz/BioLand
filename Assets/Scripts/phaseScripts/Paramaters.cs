@@ -48,7 +48,7 @@ public class Parameters
     private string _path;
     public Parameters(){
         taxa = 2f;
-        scorePercentageLost= 30;
+        scorePercentageLost= 20;
         numDaysEffect = 5;
         numberDayCicles = 10;
         timeDay = 1f;   

@@ -289,10 +289,13 @@ public class Enviroment : MonoBehaviour {
                 }*/
                 
                 contaminant.qtd -=degradationValueTemp;
-                b.qtd += ((degradationValueTemp)-(degradationValueTemp*absRateNutrient));
+				float teste;
+				teste =((degradationValueTemp));
+				Debug.Log("total: "+ degradationValueTemp+", real:"+ teste);
+                b.qtd += ((degradationValueTemp*absRateNutrient));
             }else if(b.qtd > 10 && Array.Exists(b.toxicList, element => (int) element== (int)contaminant.type)){
                 float degradationValueTemp = ( contaminant.qtdMax *(b.qtd*(b.degRate) )) ;
-                b.qtd -= ((degradationValueTemp)-(degradationValueTemp*absRateNutrient));
+                b.qtd -= ((degradationValueTemp*absRateNutrient));
             }
         }
         int depois = roundPercentualContaminant(contaminant.percentage);
@@ -301,10 +304,10 @@ public class Enviroment : MonoBehaviour {
     private float calculateEatNegative(Bacteria b,float sum,int qtdNutri,int random){
             if(b.qtd<10)
                 return 1;
-            return (float)((qtdNutri-random)- (Math.Abs(qtdNutri-random)*absRateNutrient));
+            return (float)((Math.Abs(qtdNutri-random)*absRateNutrient));
     }
     private float calculateEatPositive(Bacteria b,float sum,int qtdNutri,int random){
-        return (float)((qtdNutri+random)- (Math.Abs(qtdNutri+random)*absRateNutrient));
+        return (float)((Math.Abs(qtdNutri+random)*absRateNutrient));
     }
     private float sumBacterias(){
         float sum=0;
