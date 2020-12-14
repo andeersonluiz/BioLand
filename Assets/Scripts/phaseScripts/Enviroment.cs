@@ -121,8 +121,12 @@ public class Enviroment : MonoBehaviour {
     private float contaminantPrevious;
     int scoreTemp;
     float contaminantTemp;
-
-    void Start () {
+	
+	List<float> dataDegradeted;
+	
+	private float valuePrevious;
+	private Toast toast;
+    void Awake () {
         
         listBacterias = Bacteria.getClone( ScenesManager.bacterias);
         contaminant = ScenesManager.contaminant.getClone();
@@ -157,9 +161,9 @@ public class Enviroment : MonoBehaviour {
 
         scorePrevious=score;
         contaminantPrevious=contaminant.percentage;
-
+		valuePrevious = contaminant.qtd;
         degRate = new float[5];
-        
+        dataDegradeted = new List<float>();
 
         for(int i=0;i<5;i++){
             degRate[i]=listBacterias[i].degRate;
@@ -183,63 +187,27 @@ public class Enviroment : MonoBehaviour {
         lineScript = FindObjectOfType<GraphLineScript> ();
         
         lineScript.init (contaminant);
-        lineScript.setObjectiveValue(objectiveValue);
+        lineScript.setObjectiveValue(objectiveValue,contaminant);
         
 
         updateStatusVariablesEnviroment();
 
         changeDegradationRate(parameters.getMoistureStatus(variables.moisture));
         absRateNutrient = parameters.verifyStatusEnviroment(variables.pH,variables.temperature);
-
+		toast = FindObjectOfType<Toast>();
         openSelectAction();
     
     }
 
     //metodo que alimenta as bacterias
     void alimentar (int qtdNutri) {
-        float sumBac = sumBacterias();
-        if(qtdNutri<0){
-            switch (actionEffect) {
-                case Action.Atenuation:
-                    foreach (Bacteria b in listBacterias) {
-                        if(b.qtd>10){
-                            int random = UnityEngine.Random.Range(0,2);
-                            float value=calculateEatNegative(b,sumBac,qtdNutri,random);
-                            b.qtd +=  value;
-                            if((Array.Exists(b.degList, element => (int) element== (int)contaminant.type))){
-                                b.qtd +=  value/4;   
-                            }else{
-                                b.qtd +=  value/3;   
-                            }
-                        }
-                    }
-                    break;
-                case Action.Bioaumentation:
-                    foreach (Bacteria b in listBacterias) {
-                        if(b.qtd>10){
-                            int random = UnityEngine.Random.Range(0,2);
-                            float value=calculateEatNegative(b,sumBac,qtdNutri,random);
-                            if((Array.Exists(b.degList, element => (int) element== (int)contaminant.type))){
-                                b.qtd +=  value/4;   
-                            }else{
-                                b.qtd +=  value/3;   
-                            }
-                        }
-                    }
-                    break;     
-            }
-        }else{
+        float sumBac = sumBacterias(); 
         switch (actionEffect) {
             case Action.Atenuation:
                 foreach (Bacteria b in listBacterias) {
                     int random = UnityEngine.Random.Range(0,2);
-                    float value=calculateEatPositive(b,sumBac,qtdNutri,random);
-                    if((Array.Exists(b.degList, element => (int) element== (int)contaminant.type))){
-                        
-                        b.qtd +=  value/3;   
-                    }else{
-                        b.qtd +=  value/4;   
-                    }
+                    float value=calculateEatNegative(b,sumBac,qtdNutri,random);
+                        b.qtd -=  value;   
                 }
                 break;
 
@@ -248,9 +216,11 @@ public class Enviroment : MonoBehaviour {
                  int random = UnityEngine.Random.Range(0,2);
                 float value=calculateEatPositive(b,sumBac,qtdNutri,random);
                     if((Array.Exists(b.degList, element => (int) element== (int)contaminant.type))){
-                        b.qtd +=  value/3;   
+						                        Debug.Log("Alimentei2:"+ value+" y " + globalEnviroment);
+
+                        b.qtd +=  value;   
                     }else{
-                        b.qtd +=  value/4;   
+                        b.qtd +=  (value/1.5f);   
                     }
              }
                 break; 
@@ -258,47 +228,44 @@ public class Enviroment : MonoBehaviour {
                 foreach (Bacteria b in listBacterias) {
                     int random = UnityEngine.Random.Range(0,2);
                 float value=calculateEatPositive(b,sumBac,qtdNutri,random);
-                b.qtd +=  value;
-                    if((Array.Exists(b.degList, element => (int) element== (int)contaminant.type))){
-                        b.qtd +=  value/3;   
+                    if(bacteriaEffectBiaum.name == b.name){
+						                        Debug.Log("Alimentei3:"+ value+" x "+bacteriaEffectBiaum.name + "y" + globalEnviroment);
+
+                        b.qtd +=  value;   
                     }else{
-                        b.qtd +=  value/4;   
+                        b.qtd -=  (value);   
                     }                  
                     }
                 break;
             default:
                 break;
         }
-        }
+        
         
 
     }
     // metodo para degradar as bacterias e contaminante
     void degradar () {
+		
         int antes = roundPercentualContaminant(contaminant.percentage);
+		Debug.Log("antes" + antes);
         float sum = sumBacterias();
         foreach (Bacteria b in listBacterias) {
             if (b.qtd > 10 && Array.Exists(b.degList, element => (int) element== (int)contaminant.type)) {
                 float degradationValueTemp;
                 degradationValueTemp = ( contaminant.qtdMax *(b.qtd*(b.degRate))*(1+(b.qtd/sum)));
-
-                /*if(b.qtd>1500){
-                    degradationValueTemp = ( contaminant.qtdMax *(b.qtd*(b.degRate))*((1-(b.qtd/sum))));
-                }else{
-                    degradationValueTemp = ( contaminant.qtdMax *(b.qtd*(b.degRate))*(1+(b.qtd/sum)));
-                }*/
-                
                 contaminant.qtd -=degradationValueTemp;
-				float teste;
-				teste =((degradationValueTemp));
-				Debug.Log("total: "+ degradationValueTemp+", real:"+ teste);
-                b.qtd += ((degradationValueTemp*absRateNutrient));
+                //b.qtd += ((degradationValueTemp*absRateNutrient));
+				b.qtd += ((degradationValueTemp/contaminant.qtdMax)+0.0015f)*b.qtd*absRateNutrient;
+				dataDegradeted.Add(degradationValueTemp*absRateNutrient);
             }else if(b.qtd > 10 && Array.Exists(b.toxicList, element => (int) element== (int)contaminant.type)){
                 float degradationValueTemp = ( contaminant.qtdMax *(b.qtd*(b.degRate) )) ;
-                b.qtd -= ((degradationValueTemp*absRateNutrient));
+                b.qtd -= ((degradationValueTemp/contaminant.qtdMax)+0.0015f)*b.qtd*absRateNutrient;
             }
         }
-        int depois = roundPercentualContaminant(contaminant.percentage);
+		        int depois = roundPercentualContaminant(contaminant.percentage);
+
+		Debug.Log("depois" + depois);
         setPercentualContaminationDifference(antes,depois);
     }
     private float calculateEatNegative(Bacteria b,float sum,int qtdNutri,int random){
@@ -333,9 +300,14 @@ public class Enviroment : MonoBehaviour {
 
     void Update () {
         time += Time.deltaTime;
+		if(Input.GetKeyDown(KeyCode.K)){
+            //gameOver(true);
+			//changeVariablesEnviroment();
+
+        }
         if (time > timeDay && !isPaused) {
             updateDay();
-            
+            updateCountDown();
             countDay++;
             alimentar(globalEnviroment);
             degradar();
@@ -345,9 +317,7 @@ public class Enviroment : MonoBehaviour {
                  updateScoreScript(scoreLoss10days);
                  countDay=0;
             }
-            if(Input.GetKeyDown(KeyCode.K)){
-                gameOver(true);
-            }
+
             if(day%5==0 && day!=0){
                 log.registerLog(day, listBacterias,contaminant,variables,actionEffect,score);
                 if(objectiveValue>contaminant.percentage){
@@ -356,7 +326,10 @@ public class Enviroment : MonoBehaviour {
                 if(score<=0){
                     gameOver(false);
                 }
+				if(day%90==0){
+					updateValueTec();
 
+				}
                 if(day%100==0){
                     changeVariablesEnviroment();
                 }
@@ -364,13 +337,25 @@ public class Enviroment : MonoBehaviour {
                 updateScoreGame();
             }
 
-            updateCountDown();
+            
             
         }
 
         
 
     }
+	
+	public void updateValueTec(){
+		float mean = meanDegradeted();
+		valueAtenuation= -1*(int)mean;
+		Debug.Log("VALUE ATENUATION"+valueAtenuation);
+		valueBioest=(int)(mean*0.4f);
+				Debug.Log("VALUE valueBioest"+valueBioest);
+
+		valueBioaum=(int)(mean*0.2f);
+				Debug.Log("VALUE valueBioaum"+valueBioaum);
+
+	}
     public void openSelectAction(){
         setLastResult();
         if(day!=1){
@@ -386,15 +371,18 @@ public class Enviroment : MonoBehaviour {
     public void setLastResult(){
         scoreTemp = score - scorePrevious;
         contaminantTemp= contaminantPrevious-contaminant.percentage;
+		float valueRemoved = valuePrevious - contaminant.qtd;
+		Debug.Log(valuePrevious+" - "+contaminant.qtd);
         if(scoreTemp<0){
             previousValues[0].color=Color.red;
         }else if(scoreTemp>0){
             previousValues[0].color=Color.green;
         }
         previousValues[0].text = scoreTemp.ToString();
-        previousValues[1].text = System.Math.Round((contaminantTemp*100),2).ToString()+"%";
+        previousValues[1].text = System.Math.Round((valueRemoved),1).ToString()+" mg/Kg";
         scorePrevious=score;
         contaminantPrevious = contaminant.percentage;
+		valuePrevious= contaminant.qtd;
     }
     public void closeSelectAction(){
         ButtonVelocityManager.Instance.setStatus(ButtonVelocityManager.Instance.lastButtonUsedIndex);
@@ -415,14 +403,20 @@ public class Enviroment : MonoBehaviour {
             goStar.GetComponent<RectTransform>().localPosition = new Vector2(-3f,65f);
             goStar.GetComponent<RectTransform>().localScale = new Vector3(1f,1f,1f);
             PlayerManager.Instance.setScore(ScenesManager.valuePhase,score);
-            log.finalizeLog(ScenesManager.valuePhase);
+			log.finalizeLog(ScenesManager.valuePhase,"win");
         }else{
             gameLosePanel.SetActive(true);
+			log.finalizeLog(ScenesManager.valuePhase,"lose");
+
         }
         disableActionButtons();
         disableDayButtons();
     }
 
+	public void exitPhase(){
+		log.finalizeLog(ScenesManager.valuePhase,"quit");
+
+	}
     private int getStar(){
         if(score<300){
             return 0;
@@ -487,7 +481,7 @@ public class Enviroment : MonoBehaviour {
     public void setAction(int act){
         if(countDownActionDays==0 && day>0){
         int globalValueTemp=0;  
-
+		
         switch(act){
             case 0:
                 globalValueTemp =(int)(valueAtenuation);
@@ -495,15 +489,29 @@ public class Enviroment : MonoBehaviour {
                 closeSelectAction();
                 break;
             case 1:
-                globalValueTemp =(int)(valueBioest);
-                applyAction(Action.Bioestimulation,globalValueTemp,new Vector3(6.66f,1,1),costBioest);
-                closeSelectAction();
+				if(score>(costBioest*-1)){
+					globalValueTemp =(int)(valueBioest);
+					applyAction(Action.Bioestimulation,globalValueTemp,new Vector3(6.66f,1,1),costBioest);
+					closeSelectAction();
+			
+				}else{
+					toast.showToastNotCoins("You don't have enough BioCoins");
+				}
                 break;
+
             case 2:
-                disableActionButtons();
-                showPoupUpBioaugmentation();
-                setNameButtonsPoupUp(); 
-                break;
+				Debug.Log("score:"+ score);
+				if(score>(costBioaum*-1)){
+					disableActionButtons();
+					showPoupUpBioaugmentation();
+					setNameButtonsPoupUp();
+				}else{
+					toast.showToastNotCoins("You don't have enough BioCoins");
+
+				}
+                 
+                
+				break;
         }
         }
     }
@@ -528,9 +536,11 @@ public class Enviroment : MonoBehaviour {
         bioaugmentationPoupUp.SetActive(true);
     }
 
+	private Bacteria bacteriaEffectBiaum;
     public void executeBioaugmentation(int pos){
         bioaugmentationPoupUp.SetActive(false); 
-        listBacterias[pos].qtd += (int)(100*absRateNutrient);
+        listBacterias[pos].qtd += (int)(500*absRateNutrient);
+		bacteriaEffectBiaum= listBacterias[pos];
         applyAction(Action.Bioaumentation,(int)(valueBioaum),new Vector3(6.66f,1,1),costBioaum);
         closeSelectAction();
         enableAllButtons();
@@ -571,14 +581,24 @@ public class Enviroment : MonoBehaviour {
     }
 
     private void changeVariablesEnviroment(){
-        variables.pH = (float)System.Math.Round(UnityEngine.Random.Range(6.0f, 7.5f),1);
-        variables.temperature = UnityEngine.Random.Range(15,36);
+        variables.pH = (float)System.Math.Round(UnityEngine.Random.Range(6f, 7.6f),1);
+        variables.temperature = UnityEngine.Random.Range(20,36);
         variables.moisture = (Moisture)(UnityEngine.Random.Range(0,3));
         changeDegradationRate(parameters.getMoistureStatus(variables.moisture));
         absRateNutrient = parameters.verifyStatusEnviroment(variables.pH,variables.temperature);
+
         updateStatusVariablesEnviroment();
     }
 
+	private float meanDegradeted(){
+		float sum=0;
+		foreach(float f in dataDegradeted){
+			sum+=f;
+		}
+		float mean = sum/dataDegradeted.Count;
+		dataDegradeted.Clear();
+		return mean;
+	}
     private void changeDegradationRate(float valueDeg){
         int i=0;
         foreach(Bacteria b in listBacterias){

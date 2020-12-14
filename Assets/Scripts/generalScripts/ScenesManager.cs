@@ -41,15 +41,15 @@ public class ScenesManager : MonoBehaviour
     {
 
         listBacterias = new Bacteria[]{
-            new Bacteria (0, "Agromyces sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Diesel},0.000001f/2.5f), 
-            new Bacteria (1, "Arthrobacter sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Diesel},0.000002f/2.5f), 
-            new Bacteria (2, "Bacillus sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Biodiesel},0.0000024f/2.5f), 
-            new Bacteria (3, "Burkholderia sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Biodiesel},0.0000024f/2.5f), 
-            new Bacteria (4, "Cupriavidus sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Diesel},0.000001f/2.5f), 
-            new Bacteria (5, "Lysobacter sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Diesel},0.000001f/2.5f), 
-            new Bacteria (6, "Micrococcus sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Nothing},0.000002f/2.5f), 
-            new Bacteria (7, "Sinomonas sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Diesel},0.000001f/2.5f), 
-            new Bacteria (8, "Staphylococcus sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Biodiesel},0.0000024f/2.5f)
+            new Bacteria (0, "Agromyces sp.", 455f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Diesel},0.000001f/1.5f), 
+            new Bacteria (1, "Arthrobacter sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Diesel},0.000002f/1.5f), 
+            new Bacteria (2, "Bacillus sp.", 506f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Biodiesel},0.0000024f/1.5f), 
+            new Bacteria (3, "Burkholderia sp.", 483f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Biodiesel},0.0000024f/1.5f), 
+            new Bacteria (4, "Cupriavidus sp.", 508f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Diesel},0.000001f/1.5f), 
+            new Bacteria (5, "Lysobacter sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Diesel},0.000001f/1.5f), 
+            new Bacteria (6, "Micrococcus sp.", 476f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Nothing},0.000002f/1.5f), 
+            new Bacteria (7, "Sinomonas sp.", 500f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Diesel},0.000001f/1.5f), 
+            new Bacteria (8, "Staphylococcus sp.", 512f,new Pollutant[] {Pollutant.Nothing},new Degradant[] {Degradant.Biodiesel},0.0000024f/1.5f)
         };
         phasesManager = FindObjectOfType<PhasesManager> ();
         sm_instance = this;
@@ -167,17 +167,19 @@ public class ScenesManager : MonoBehaviour
                     listBacterias[2],
                     listBacterias[3],
                     listBacterias[8] };
-                contaminant = new Contaminant ("Diesel", 10000f, 8000f, Type.Diesel);
+                contaminant = new Contaminant ("Diesel", 300f, 240f, Type.Diesel);
                 //variables =new VariablesEnviroment(6.6f,25f,Moisture.high);
                 //variables =new VariablesEnviroment(1f,25f,Moisture.high);
                 //variables =new VariablesEnviroment(1f,1f,Moisture.high);
                 //variables =new VariablesEnviroment(6.6f,25f,Moisture.medium);
-                variables =new VariablesEnviroment(1f,25f,Moisture.medium);
+                variables =new VariablesEnviroment(5.7f,25f,Moisture.medium);
                 //variables =new VariablesEnviroment(1f,1f,Moisture.medium);
                 //variables =new VariablesEnviroment(6.6f,25f,Moisture.low);
                 //variables =new VariablesEnviroment(1f,25f,Moisture.low);
                 //variables =new VariablesEnviroment(1f,1f,Moisture.low);
-                objectiveValue=0.1f;
+				
+                objectiveValue=((30f)/contaminant.qtdMax);
+				Debug.Log("objvalue"+objectiveValue);
                 break;
             case "2":
                 bacterias=new Bacteria[] { 
@@ -186,7 +188,7 @@ public class ScenesManager : MonoBehaviour
                     listBacterias[2],
                     listBacterias[3],
                     listBacterias[4] };
-                contaminant = new Contaminant ("Biodiesel", 10000f, 8000f, Type.Biodiesel);
+                contaminant = new Contaminant ("Biodiesel", 300f, 225f, Type.Biodiesel);
                 //variables =new VariablesEnviroment(6.6f,25f,Moisture.high);
                 //variables =new VariablesEnviroment(1f,25f,Moisture.high);
                 //variables =new VariablesEnviroment(1f,1f,Moisture.high);
@@ -195,8 +197,9 @@ public class ScenesManager : MonoBehaviour
                 //variables =new VariablesEnviroment(1f,1f,Moisture.medium);
                 //variables =new VariablesEnviroment(6.6f,25f,Moisture.low);
                 //variables =new VariablesEnviroment(1f,25f,Moisture.low);
-                variables =new VariablesEnviroment(1f,1f,Moisture.low);
-                objectiveValue=0.2f;
+                variables =new VariablesEnviroment(6.9f,27f,Moisture.low);
+				
+                objectiveValue=((30f)/contaminant.qtdMax);
                 break;  
             case "3":
                 bacterias=new Bacteria[] { 
@@ -205,17 +208,17 @@ public class ScenesManager : MonoBehaviour
                     listBacterias[2],
                     listBacterias[3],
                     listBacterias[4] };
-                contaminant = new Contaminant ("Diesel", 10000f, 8000f, Type.Diesel);
+                contaminant = new Contaminant ("Diesel", 300f, 250f, Type.Diesel);
                 //variables =new VariablesEnviroment(6.6f,25f,Moisture.high);
                 //variables =new VariablesEnviroment(1f,25f,Moisture.high);
                 //variables =new VariablesEnviroment(1f,1f,Moisture.high);
                 //variables =new VariablesEnviroment(6.6f,25f,Moisture.medium);
-                variables =new VariablesEnviroment(1f,25f,Moisture.medium);
+                variables =new VariablesEnviroment(6f,16f,Moisture.high);
                 //variables =new VariablesEnviroment(1f,1f,Moisture.medium);
                 //variables =new VariablesEnviroment(6.6f,25f,Moisture.low);
                 //variables =new VariablesEnviroment(1f,25f,Moisture.low);
                 //variables =new VariablesEnviroment(1f,1f,Moisture.low);
-                objectiveValue=0.1f;
+                objectiveValue=((30f)/contaminant.qtdMax);
                 break;  
             case "4":
                 bacterias=new Bacteria[] { 
@@ -224,17 +227,17 @@ public class ScenesManager : MonoBehaviour
                     listBacterias[2],
                     listBacterias[4],
                     listBacterias[5] };
-                contaminant = new Contaminant ("Diesel", 10000f, 8000f, Type.Biodiesel);
+                contaminant = new Contaminant ("Diesel", 300f, 280f, Type.Biodiesel);
                 //variables =new VariablesEnviroment(6.6f,25f,Moisture.high);
                 //variables =new VariablesEnviroment(1f,25f,Moisture.high);
                 //variables =new VariablesEnviroment(1f,1f,Moisture.high);
                 //variables =new VariablesEnviroment(6.6f,25f,Moisture.medium);
-                variables =new VariablesEnviroment(1f,25f,Moisture.medium);
+                variables =new VariablesEnviroment(6.6f,31f,Moisture.low);
                 //variables =new VariablesEnviroment(1f,1f,Moisture.medium);
                 //variables =new VariablesEnviroment(6.6f,25f,Moisture.low);
                 //variables =new VariablesEnviroment(1f,25f,Moisture.low);
                 //variables =new VariablesEnviroment(1f,1f,Moisture.low);
-                objectiveValue=0.1f;
+                objectiveValue=((30f)/contaminant.qtdMax);
                 break;      
         }
     }

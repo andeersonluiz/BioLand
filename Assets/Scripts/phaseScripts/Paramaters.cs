@@ -65,7 +65,7 @@ public class Parameters
     
         valueAtenuation=-1;
         valueBioest=5;
-        valueBioaum=-1;
+        valueBioaum=2;
         
         
 
@@ -77,10 +77,9 @@ public class Parameters
     
     public float verifyStatusEnviroment(float pH,float temp){
 
-            if ((pH >= 6.5f && pH <= 7) && (temp >= 20 && temp <= 30)) {
+            if ((pH >= 6.5f && pH <= 7) && (temp >= 25 && temp <= 30)) {
                 return 1f;
-            }else if ((pH >= 6.5f && pH <= 7) || (temp >= 20 && temp <= 30)) {
-                Debug.Log("eu");
+            }else if ((pH >= 6.5f && pH <= 7) || (temp >= 25 && temp <= 30)) {
                 return 0.9f;
             }else {
                 return 0.8f;
@@ -97,14 +96,14 @@ public class Parameters
         Color moistureColor;
         if(variables.pH >= 6.5f && variables.pH <= 7){
             phColor=perfect;
-        }else if(variables.pH >= 5.5f && variables.pH <= 8){
+        }else if(variables.pH >= 6f && variables.pH < 6.5f){
             phColor=good;
         }else{
             phColor=bad;
         }
-        if(variables.temperature >= 20 && variables.temperature <= 30){
+        if(variables.temperature >= 25 && variables.temperature <= 30){
             tempColor=perfect;
-        }else if(variables.temperature >= 15 && variables.temperature <= 35){
+        }else if(variables.temperature >= 20 && variables.temperature <25){
             tempColor=good;
         }else{
             tempColor=bad;

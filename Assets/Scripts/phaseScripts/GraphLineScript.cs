@@ -20,6 +20,8 @@ public class GraphLineScript : MonoBehaviour {
     private float velocityMove;
 
     private GameObject ContaminantPrevious;
+    
+	public GameObject[] daysList;
 
     //controla a barra de porcentagem de contaminacao
     private bool progressing;
@@ -193,9 +195,8 @@ public class GraphLineScript : MonoBehaviour {
     }
 
     public void incrementDayBar () {
-        GameObject[] days = GameObject.FindGameObjectsWithTag ("day");
         int i=0;
-        foreach (GameObject go in days) {
+        foreach (GameObject go in daysList) {
             listDaysTable[i]=listDaysTable[i]*2;
             go.GetComponent<Text> ().text = (listDaysTable[i]).ToString ();
             i++;
@@ -225,37 +226,37 @@ public class GraphLineScript : MonoBehaviour {
         GameObject[] contaminatQtd = GameObject.FindGameObjectsWithTag ("qtdContamination");
         foreach (GameObject go in percentual) {
             if (percentageContaminant < 0f) {
-                go.GetComponent<Text> ().text = "0%";
+                go.GetComponent<Text> ().text = "0 mg/Kg";
             } else {
-                go.GetComponent<Text> ().text = System.Math.Round ((per * 100), 1).ToString () + "%";
+                go.GetComponent<Text> ().text = (System.Math.Round ((per * contaminant.qtdMax), 1)).ToString () + " mg/Kg";
             }
         }
         foreach (GameObject go in contaminatQtd) {
             if (percentageContaminant < 0f) {
-                go.GetComponent<Text> ().text = "0";
+                go.GetComponent<Text> ().text = "0 %";
             } else {
-                go.GetComponent<Text> ().text = ((int)(contaminant.qtd)).ToString ();
+                go.GetComponent<Text> ().text = System.Math.Round((contaminant.percentage*100),1).ToString ()+ "%";
             }
         }
 
     }
-    public void setObjectiveValue(float value){
+    public void setObjectiveValue(float value,Contaminant c){
         int heightCanvasQuad = 363;
         int widthCanvasQuad = 193;
+		Debug.Log("ovalor e "+value);
         float heightObjective = heightCanvasQuad * value;
-
         GameObject[] goList = GameObject.FindGameObjectsWithTag("objective");
         foreach(GameObject go in goList){
             RectTransform rt = go.GetComponent<RectTransform>();
             rt.sizeDelta = new Vector2(widthCanvasQuad,heightObjective);
         }
-        setTextObjective(value);
+        setTextObjective(value,c);
 
     }
 
-    private void setTextObjective(float value ){
+    private void setTextObjective(float value,Contaminant c ){
         GameObject go = GameObject.FindGameObjectWithTag("objectiveText");
-        go.GetComponent<Text>().text ="OBJECTIVE\n"+(value*100).ToString()+"% LEVEL CONTAMINATION";
+        go.GetComponent<Text>().text ="OBJECTIVE\n"+(value*c.qtdMax).ToString()+" mg/Kg CONCENTRATION";
     }
     void Start () { }
     void Update () {

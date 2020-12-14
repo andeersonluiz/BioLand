@@ -66,7 +66,7 @@ public class DatabasePlayer{
     public void saveLog(string data,int phaseIndex) {
     PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest() {
         Data = new Dictionary<string, string>() {
-            {"Phase"+phaseIndex+":"+ System.DateTime.Now.ToString("MM/dd/yyyy")+alfanumericoAleatorio(8), data}
+            {"Phase"+phaseIndex+":"+ System.DateTime.Now.ToString("MM/dd/yyyy HH:mm"), data}
         }
     },
     result => Debug.Log("Successfully updated user data"),

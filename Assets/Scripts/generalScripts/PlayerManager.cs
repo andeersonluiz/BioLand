@@ -67,8 +67,7 @@ public class PlayerManager  : MonoBehaviour{
 
     
     }
-    private void Update() {
-    }
+
     public void createAccount(){
         progressBar.SetActive(true);
         messageTextRegister.text="";
@@ -146,7 +145,7 @@ public class PlayerManager  : MonoBehaviour{
     public void onSucessGetPlayerProfile(GetPlayerProfileResult result){
         LoginSucess.SetActive(true);
         displayName =result.PlayerProfile.DisplayName;
-        LoginSucess.GetComponentInChildren<Text>().text = "Hello "+displayName;
+        LoginSucess.GetComponentInChildren<Text>().text = "Hello "+displayName+"!!";
         isLogged=true;
         popUpLogin.SetActive(false);
         loginButton.GetComponent<Button>().interactable=true;

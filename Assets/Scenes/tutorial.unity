@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -9247,8 +9247,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 38.54999, y: -33.846992}
-  m_SizeDelta: {x: 38.2425, y: 13.860744}
+  m_AnchoredPosition: {x: 29.76, y: -34.081}
+  m_SizeDelta: {x: 55.825195, y: 13.392601}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &539126758
 MonoBehaviour:
@@ -9743,8 +9743,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -22.6, y: -33.4}
-  m_SizeDelta: {x: 74.51083, y: 14.753986}
+  m_AnchoredPosition: {x: -29.928, y: -33.4}
+  m_SizeDelta: {x: 59.855408, y: 14.753986}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &577099736
 MonoBehaviour:
@@ -9778,7 +9778,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '% removed:'
+  m_Text: 'Removed:'
 --- !u!222 &577099737
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -21344,7 +21344,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'OBJECTIVE
 
-    10% LEVEL CONTAMINATION'
+    10 mg/KG CONCENTRATION'
 --- !u!222 &1260285652
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -23094,8 +23094,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 38.54999, y: -33.104992}
-  m_SizeDelta: {x: 38.2424, y: 14.164974}
+  m_AnchoredPosition: {x: 29.759, y: -35.38}
+  m_SizeDelta: {x: 55.82686, y: 10.792055}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1377977376
 MonoBehaviour:
@@ -23129,7 +23129,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 0%
+  m_Text: 123 mg/kG
 --- !u!222 &1377977377
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -32119,8 +32119,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 323.6, y: -166.57}
-  m_SizeDelta: {x: 41.86406, y: 40.20321}
+  m_AnchoredPosition: {x: 322.44, y: -175.9}
+  m_SizeDelta: {x: 81.90492, y: 40.20321}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2079235267
 MonoBehaviour:
@@ -32143,7 +32143,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 21
+    m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
@@ -32154,7 +32154,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '80%
+  m_Text: '239 mg/Kg
 
 '
 --- !u!222 &2079235268

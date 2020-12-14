@@ -3,19 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-
 using Newtonsoft.Json;
 
 public class LogEvent{
 
-    string path = Application.dataPath +"/LogEvents.txt";
     string log;
     public LogEvent(){
         log="[";
-        if(!File.Exists(path)){
-            File.WriteAllText(path,"{");
-
-        }
     }
 
 
@@ -26,10 +20,12 @@ public class LogEvent{
     }
 
     public void registerLogAction(Action actionSelected,int score, float polluantRemoved ){
-        log+="{ \" Action Selected \" : \" "+actionSelected+" \" ,\" Last Result(score) \" : "+score+" ,\" Last Result(% removed) \" :  "+System.Math.Round(polluantRemoved,3)+" },";
+		var polluantRemovedTemp = (System.Math.Round(polluantRemoved,3)*100).ToString().Replace(',','.');
+        log+="{ \" Action Selected \" : \" "+actionSelected+" \" ,\" Last Result(score) \" : "+score+" ,\" Last Result(% removed) \" :  "+polluantRemovedTemp+" },";
     }
     
-    public void finalizeLog(int valuePhase){
+    public void finalizeLog(int valuePhase,string status){
+		log+="{ \" status \" : \""+status+"\" }," ;
         log=log.Substring(0, log.Length - 1)+"]";
         PlayerManager.Instance.saveLog(log,valuePhase);
        
