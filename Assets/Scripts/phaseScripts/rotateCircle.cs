@@ -4,19 +4,13 @@ using UnityEngine;
 
 public class rotateCircle : MonoBehaviour
 {
-    private float speed=5f;
-    private float angle=0;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private float speed = 5f;
+    private float angle = 0;
 
-    // Update is called once per frame
     void Update()
     {
-        angle+=speed*Time.deltaTime;
-        this.GetComponent<RectTransform>().rotation =  Quaternion.EulerAngles(0f,0f,angle);
-    
+        angle += speed * Time.deltaTime;
+        this.GetComponent<RectTransform>().rotation = Quaternion.EulerAngles(0f, 0f, angle);
+
     }
 }

@@ -1,15 +1,15 @@
-﻿ using System.Collections;
- using System.Collections.Generic;
- using UnityEngine;
- using UnityEngine.SceneManagement;
- using UnityEngine.UI;
- using UnityEngine.EventSystems;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public enum Status{Pause=0, Play=1, Speed=2};
+public enum Status { Pause = 0, Play = 1, Speed = 2 };
 
 public class ButtonVelocityManager : MonoBehaviour
 {
-    private Button[] listButtons = new Button[3];
+    public Button[] listButtons;
     private Status _status;
     private Enviroment ev;
     private Parameters parameters;
@@ -17,45 +17,46 @@ public class ButtonVelocityManager : MonoBehaviour
     private SkyColors skyColors;
     private static ButtonVelocityManager bm_instance;
     public int lastButtonUsedIndex;
-    public static ButtonVelocityManager Instance{get{return bm_instance;}}
+    public static ButtonVelocityManager Instance { get { return bm_instance; } }
     void Awake()
     {
-        lastButtonUsedIndex=1;
+        lastButtonUsedIndex = 1;
         ev = FindObjectOfType<Enviroment>();
-        cloudScript=FindObjectOfType<CloudScript>();
+        cloudScript = FindObjectOfType<CloudScript>();
         skyColors = FindObjectOfType<SkyColors>();
         parameters = new Parameters();
         ev.isPaused = true;
         status = Status.Pause;
-        GameObject[] listGos = GameObject.FindGameObjectsWithTag("buttonVel");
-        for(int i=0;i<listGos.Length;i++){
-           listButtons[i]= listGos[i].GetComponent<Button>();
-        }
-        bm_instance=this; 
+        bm_instance = this;
     }
 
-    public void selectButton(){
-
-
-        GameObject go =EventSystem.current.currentSelectedGameObject;
+    public void selectButton()
+    {
+        GameObject go = EventSystem.current.currentSelectedGameObject;
         Button btn = go.GetComponent<Button>();
-        int index=-1;
-        for(int i=0;i<listButtons.Length;i++){
+        int index = -1;
+        for (int i = 0; i < listButtons.Length; i++)
+        {
 
-            if(btn.name == listButtons[i].name){
-                listButtons[i].interactable =false;
-                index=i;
-                lastButtonUsedIndex=index;
-            }else{
-                listButtons[i].interactable =true;
+            if (btn.name == listButtons[i].name)
+            {
+                listButtons[i].interactable = false;
+                index = i;
+                lastButtonUsedIndex = index;
+            }
+            else
+            {
+                listButtons[i].interactable = true;
             }
         }
         setStatus(index);
     }
-    
 
-    public void setStatus(int value){
-        switch(value){
+
+    public void setStatus(int value)
+    {
+        switch (value)
+        {
             case 0:
                 status = Status.Pause;
                 ev.isPaused = true;
@@ -68,30 +69,36 @@ public class ButtonVelocityManager : MonoBehaviour
                 cloudScript.speedCloud = parameters.speedCloud;
                 skyColors.valueAlpha = parameters.valueAlpha;
                 break;
-            case 2: 
+            case 2:
                 status = Status.Speed;
                 ev.isPaused = false;
                 ev.timeDay = parameters.timeSpeed;
-                cloudScript.respawnCloud = parameters.respawnCloud/2;
-                cloudScript.speedCloud = parameters.speedCloud*2;
-                skyColors.valueAlpha = parameters.valueAlpha*5;
-                
+                cloudScript.respawnCloud = parameters.respawnCloud / 2;
+                cloudScript.speedCloud = parameters.speedCloud * 2;
+                skyColors.valueAlpha = parameters.valueAlpha * 5;
+
 
                 break;
         }
         updateButtons();
     }
-    public void updateButtons(){
-        
-        for(int i=0;i<3;i++){
-            if(i == (int)status){
-                 listButtons[i].interactable =false;
-            }else{
-                listButtons[i].interactable =true;
+    public void updateButtons()
+    {
+
+        for (int i = 0; i < 3; i++)
+        {
+
+            if (i == (int)status)
+            {
+                listButtons[i].interactable = false;
+            }
+            else
+            {
+                listButtons[i].interactable = true;
 
             }
         }
     }
 
-    public Status status{get;set;}
+    public Status status { get; set; }
 }

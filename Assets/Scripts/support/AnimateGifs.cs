@@ -8,32 +8,29 @@ public class AnimateGifs : MonoBehaviour
     public Sprite[] spritesImages;
     public Image imageObj;
     private bool continueBool = true;
-    int index=0;
-    private bool isFirst=true;
+    int index = 0;
+    private bool isFirst = true;
     private float time;
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
-    {   
+    {
         time += Time.deltaTime;
-       
-        if(continueBool){
-            if((int)(time%1)==0 && time>=1 ){
+
+        if (continueBool)
+        {
+            if ((int)(time % 1) == 0 && time >= 1)
+            {
                 imageObj.sprite = spritesImages[index];
                 index++;
-                time=0;
-                
+                time = 0;
+
             }
-            if(index==spritesImages.Length){
-            continueBool=false;
+            if (index == spritesImages.Length)
+            {
+                continueBool = false;
             }
         }
 
-        
+
     }
 
 }

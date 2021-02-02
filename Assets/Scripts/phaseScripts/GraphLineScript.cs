@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-public class GraphLineScript : MonoBehaviour {
+public class GraphLineScript : MonoBehaviour
+{
     public GameObject prefrabPoint;
     public SpriteRenderer quadGraph;
     public Transform progressBar;
@@ -20,8 +21,8 @@ public class GraphLineScript : MonoBehaviour {
     private float velocityMove;
 
     private GameObject ContaminantPrevious;
-    
-	public GameObject[] daysList;
+
+    public GameObject[] daysList;
 
     //controla a barra de porcentagem de contaminacao
     private bool progressing;
@@ -41,67 +42,76 @@ public class GraphLineScript : MonoBehaviour {
     private float sumInnerX;
 
     // booleando que verifica se o grafico esta sendo redimensionado
-    private bool isScaling=false;
+    private bool isScaling = false;
 
     //variavel de controle para o tamanho dos pontos
-    private int countScale=1;
+    private int countScale = 1;
 
     //valor, que quando alcancado, o grafico é redimensionado
-    private int nextValueScale=5;
+    private int nextValueScale = 5;
     //numero de vezes que um ponto no grafico é gerado
-    int countPoint=0;
+    int countPoint = 0;
     //limitador para realizar acoes em um determinado tempo
-    private float countDownAction=0;
+    private float countDownAction = 0;
     // dicionario com todos os pontos e o index deles ordenados de acordo com a insercao
-    Dictionary<int,GameObject> dictPoints;
+    Dictionary<int, GameObject> dictPoints;
 
     private Parameters parameters;
-    private bool isFirst =true;
+    private bool isFirst = true;
     private GameObject pointInstance;
-    private float countTemp=0;
+    private float countTemp = 0;
+    private ManageLanguagePhase manageLanguagePhase;
 
     private float originalScalePoint;
-    public void init (Contaminant c) {
-        progressBar.GetComponent<Image> ().fillAmount = (float) c.qtd / c.qtdMax;
-        percentageContaminant = (float) c.qtd / c.qtdMax;
-        positionInitialX= 1.744f;
+    public void init(Contaminant c)
+    {
+        progressBar.GetComponent<Image>().fillAmount = (float)c.qtd / c.qtdMax;
+        percentageContaminant = (float)c.qtd / c.qtdMax;
+        positionInitialX = 1.744f;
 
-        valueScale=0.5f;
-        xPositionScale=0.17f*5;
-        sumInnerX=1.282f;
+        valueScale = 0.5f;
+        xPositionScale = 0.17f * 5;
+        sumInnerX = 1.282f;
         xPosition = transform.position.x;
-        countPoint=0;
+        countPoint = 0;
         progressing = false;
-        listDaysTable = new int[]{5,10,15,20};
-        dictPoints= new Dictionary<int,GameObject>();
+        listDaysTable = new int[] { 5, 10, 15, 20 };
+        dictPoints = new Dictionary<int, GameObject>();
+        manageLanguagePhase = FindObjectOfType<ManageLanguagePhase>();
 
-        velocityMove=2f;
+        velocityMove = 2f;
         originalScalePoint = prefrabPoint.transform.localScale.x;
-        parameters= new Parameters();
+        parameters = new Parameters();
 
-        updateRadialProgressBar (percentageContaminant,c);
-        heightQuadGraph = modulo ((quadGraph.bounds.max.y) - (quadGraph.bounds.min.y));
+        updateRadialProgressBar(percentageContaminant, c);
+        heightQuadGraph = modulo((quadGraph.bounds.max.y) - (quadGraph.bounds.min.y));
         minQuadGraph = (quadGraph.bounds.min.y);
-        insertPoint (c);
+        insertPoint(c);
     }
 
-    public void insertPoint (Contaminant c) {
-        percentageContaminant = (float) c.qtd / c.qtdMax;
-        updateRadialProgressBar (percentageContaminant,c);
+    public void insertPoint(Contaminant c)
+    {
+        percentageContaminant = (float)c.qtd / c.qtdMax;
+        updateRadialProgressBar(percentageContaminant, c);
         float posY = minQuadGraph + (heightQuadGraph * percentageContaminant);
-        GameObject pointInstance=new GameObject();
-        if(countPoint == nextValueScale){               
+        GameObject pointInstance = new GameObject();
+        if (countPoint == nextValueScale)
+        {
             updateValuesScale();
         }
-        if(countPoint>=5){
-            pointInstance=instantiatePoint(posY,true);
-        }else{
-            pointInstance=instantiatePoint(posY,false);
+        if (countPoint >= 5)
+        {
+            pointInstance = instantiatePoint(posY, true);
         }
-        dictPoints.Add(countPoint,pointInstance);
+        else
+        {
+            pointInstance = instantiatePoint(posY, false);
+        }
+        dictPoints.Add(countPoint, pointInstance);
 
-        if (countPoint != 0) {
-            DrawLine (ContaminantPrevious.transform.position, pointInstance.transform.position);
+        if (countPoint != 0)
+        {
+            DrawLine(ContaminantPrevious.transform.position, pointInstance.transform.position);
             progressing = true;
         }
 
@@ -109,182 +119,233 @@ public class GraphLineScript : MonoBehaviour {
 
         pointInstance.transform.parent = this.transform;
         ContaminantPrevious = pointInstance;
-        
+
 
     }
 
-    private GameObject instantiatePoint(float posY,bool biggerThenFive){
-        if(biggerThenFive){
+    private GameObject instantiatePoint(float posY, bool biggerThenFive)
+    {
+        if (biggerThenFive)
+        {
             float positionX = transform.GetChild(transform.childCount - 1).localPosition.x;
-                Vector3 positionPoint = transform.TransformPoint(positionX+(sumInnerX), 0, 0);
-                pointInstance = Instantiate (prefrabPoint,new Vector3 ( positionPoint.x, posY, prefrabPoint.transform.position.z), Quaternion.identity);
-                if(Array.IndexOf<int>(listDaysTable,(countPoint*5))!=-1){
-                    updateKeyPoint();
-                }else{
-                    updateOthersPoint();
-                }
-        }else{
-            pointInstance = Instantiate (prefrabPoint, new Vector3 (positionInitialX+(sumInnerX*countPoint), posY, prefrabPoint.transform.position.z), Quaternion.identity);
+            Vector3 positionPoint = transform.TransformPoint(positionX + (sumInnerX), 0, 0);
+            pointInstance = Instantiate(prefrabPoint, new Vector3(positionPoint.x, posY, prefrabPoint.transform.position.z), Quaternion.identity);
+            if (Array.IndexOf<int>(listDaysTable, (countPoint * 5)) != -1)
+            {
+                updateKeyPoint();
+            }
+            else
+            {
+                updateOthersPoint();
+            }
+        }
+        else
+        {
+            pointInstance = Instantiate(prefrabPoint, new Vector3(positionInitialX + (sumInnerX * countPoint), posY, prefrabPoint.transform.position.z), Quaternion.identity);
         }
         return pointInstance;
     }
 
-    private GameObject updateKeyPoint(){
-        if(countScale>2){
-            pointInstance.transform.localScale = new Vector3(originalScalePoint/2,originalScalePoint/2,0);
-        }else{
-            pointInstance.transform.localScale = new Vector3(originalScalePoint/countScale,originalScalePoint/countScale,0);
+    private GameObject updateKeyPoint()
+    {
+        if (countScale > 2)
+        {
+            pointInstance.transform.localScale = new Vector3(originalScalePoint / 2, originalScalePoint / 2, 0);
+        }
+        else
+        {
+            pointInstance.transform.localScale = new Vector3(originalScalePoint / countScale, originalScalePoint / countScale, 0);
         }
         return pointInstance;
-        
+
     }
 
-    private GameObject updateOthersPoint(){
-        
-        if(countScale>2){
-            pointInstance.transform.localScale = new Vector3((originalScalePoint*countTemp)/(countScale+1),(originalScalePoint*countTemp/(countScale+1)),0);
-        }else{
-            pointInstance.transform.localScale = new Vector3(originalScalePoint/countScale,originalScalePoint/countScale,0);
+    private GameObject updateOthersPoint()
+    {
+
+        if (countScale > 2)
+        {
+            pointInstance.transform.localScale = new Vector3((originalScalePoint * countTemp) / (countScale + 1), (originalScalePoint * countTemp / (countScale + 1)), 0);
+        }
+        else
+        {
+            pointInstance.transform.localScale = new Vector3(originalScalePoint / countScale, originalScalePoint / countScale, 0);
 
         }
         return pointInstance;
-        
+
     }
-    private void updateValuesScale(){
-        nextValueScale=(nextValueScale*2) - (Convert.ToInt32(nextValueScale*0.15f));
-        countScale*=2;
-        valueScale=valueScale/2;
-        xPositionScale=0.17f*(valueScale*10);
+    private void updateValuesScale()
+    {
+        nextValueScale = (nextValueScale * 2) - (Convert.ToInt32(nextValueScale * 0.15f));
+        countScale *= 2;
+        valueScale = valueScale / 2;
+        xPositionScale = 0.17f * (valueScale * 10);
         xPosition = transform.position.x;
-        countTemp+=0.5f;
+        countTemp += 0.5f;
     }
 
-    float modulo (float i) {
-        if (i < 0) {
+    float modulo(float i)
+    {
+        if (i < 0)
+        {
             return i * -1;
         }
         return i;
     }
 
-    void DrawLine (Vector3 start, Vector3 end) {
-        GameObject myLine = new GameObject ();
+    void DrawLine(Vector3 start, Vector3 end)
+    {
+        GameObject myLine = new GameObject();
         myLine.transform.position = start;
-        myLine.AddComponent<LineRenderer> ();
-        LineRenderer lr = myLine.GetComponent<LineRenderer> ();
+        myLine.AddComponent<LineRenderer>();
+        LineRenderer lr = myLine.GetComponent<LineRenderer>();
         lr.gameObject.tag = "bacteriaPercentual";
         lr.useWorldSpace = false;
         lr.sortingOrder = 1;
-        lr.material = new Material (Shader.Find ("Sprites/Default"));
-        lr.SetColors (Color.black, Color.black);
-        lr.SetWidth (0.03f, 0.03f);
+        lr.material = new Material(Shader.Find("Sprites/Default"));
+        lr.SetColors(Color.black, Color.black);
+        lr.SetWidth(0.03f, 0.03f);
         lr.transform.parent = this.transform;
-        lr.SetPosition (0, myLine.transform.InverseTransformPoint ((start)));
-        lr.SetPosition (1, myLine.transform.InverseTransformPoint ((end)));
+        lr.SetPosition(0, myLine.transform.InverseTransformPoint((start)));
+        lr.SetPosition(1, myLine.transform.InverseTransformPoint((end)));
     }
 
-    void resizeGraph () {
-        this.transform.position =  new Vector3( Mathf.MoveTowards(transform.position.x, xPosition-xPositionScale, Time.deltaTime * (velocityMove/1.2f)),transform.position.y,0);
-        this.transform.localScale = new Vector3( Mathf.MoveTowards(this.transform.localScale.x, valueScale, Time.deltaTime * (velocityMove/2.1f)),this.transform.localScale.y,0);
-        isScaling=false;
+    void resizeGraph()
+    {
+        this.transform.position = new Vector3(Mathf.MoveTowards(transform.position.x, xPosition - xPositionScale, Time.deltaTime * (velocityMove / 1.2f)), transform.position.y, 0);
+        this.transform.localScale = new Vector3(Mathf.MoveTowards(this.transform.localScale.x, valueScale, Time.deltaTime * (velocityMove / 2.1f)), this.transform.localScale.y, 0);
+        isScaling = false;
     }
 
-    void DestroyBar () {
-        for (int i = 0; i < 2; i++) {
-            Destroy (this.gameObject.transform.GetChild (i).gameObject);
+    void DestroyBar()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            Destroy(this.gameObject.transform.GetChild(i).gameObject);
         }
     }
 
-    public void incrementDayBar () {
-        int i=0;
-        foreach (GameObject go in daysList) {
-            listDaysTable[i]=listDaysTable[i]*2;
-            go.GetComponent<Text> ().text = (listDaysTable[i]).ToString ();
+    public void incrementDayBar()
+    {
+        int i = 0;
+        foreach (GameObject go in daysList)
+        {
+            listDaysTable[i] = listDaysTable[i] * 2;
+            go.GetComponent<Text>().text = (listDaysTable[i]).ToString();
             i++;
         }
     }
-    private void updateScalePoints(){        
+    private void updateScalePoints()
+    {
         foreach (int index in dictPoints.Keys)
         {
-        if(!(Array.IndexOf<int>(listDaysTable,(index*5))!=-1) && index!=0){
-            if(countScale>=2){
-                dictPoints[index].transform.localScale = new Vector3( (2*originalScalePoint*(countScale-1))/countScale , (originalScalePoint*(countScale-1))/(countScale*countScale) ,0);
-            }else{
-                dictPoints[index].transform.localScale = new Vector3( originalScalePoint/countScale , originalScalePoint/(2*countScale*countScale) ,0);
+            if (!(Array.IndexOf<int>(listDaysTable, (index * 5)) != -1) && index != 0)
+            {
+                if (countScale >= 2)
+                {
+                    dictPoints[index].transform.localScale = new Vector3((2 * originalScalePoint * (countScale - 1)) / countScale, (originalScalePoint * (countScale - 1)) / (countScale * countScale), 0);
+                }
+                else
+                {
+                    dictPoints[index].transform.localScale = new Vector3(originalScalePoint / countScale, originalScalePoint / (2 * countScale * countScale), 0);
 
 
+                }
             }
-        }else{
-            dictPoints[index].transform.localScale = new Vector3(originalScalePoint*countScale,originalScalePoint/2,0);
-            }
-        }
-
-    }
-
-
-    void updateRadialProgressBar (float per,Contaminant contaminant) {
-        GameObject[] percentual = GameObject.FindGameObjectsWithTag ("percentualContamination");
-        GameObject[] contaminatQtd = GameObject.FindGameObjectsWithTag ("qtdContamination");
-        foreach (GameObject go in percentual) {
-            if (percentageContaminant < 0f) {
-                go.GetComponent<Text> ().text = "0 mg/Kg";
-            } else {
-                go.GetComponent<Text> ().text = (System.Math.Round ((per * contaminant.qtdMax), 1)).ToString () + " mg/Kg";
-            }
-        }
-        foreach (GameObject go in contaminatQtd) {
-            if (percentageContaminant < 0f) {
-                go.GetComponent<Text> ().text = "0 %";
-            } else {
-                go.GetComponent<Text> ().text = System.Math.Round((contaminant.percentage*100),1).ToString ()+ "%";
+            else
+            {
+                dictPoints[index].transform.localScale = new Vector3(originalScalePoint * countScale, originalScalePoint / 2, 0);
             }
         }
 
     }
-    public void setObjectiveValue(float value,Contaminant c){
+
+
+    void updateRadialProgressBar(float per, Contaminant contaminant)
+    {
+        GameObject[] percentual = GameObject.FindGameObjectsWithTag("percentualContamination");
+        GameObject[] contaminatQtd = GameObject.FindGameObjectsWithTag("qtdContamination");
+        foreach (GameObject go in percentual)
+        {
+            if (percentageContaminant < 0f)
+            {
+                go.GetComponent<Text>().text = "0 mg/Kg";
+            }
+            else
+            {
+                go.GetComponent<Text>().text = (System.Math.Round((per * contaminant.qtdMax), 1)).ToString() + " mg/Kg";
+            }
+        }
+        foreach (GameObject go in contaminatQtd)
+        {
+            if (percentageContaminant < 0f)
+            {
+                go.GetComponent<Text>().text = "0 %";
+            }
+            else
+            {
+                go.GetComponent<Text>().text = System.Math.Round((contaminant.percentage * 100), 1).ToString() + "%";
+            }
+        }
+
+    }
+    public void setObjectiveValue(float value, Contaminant c)
+    {
         int heightCanvasQuad = 363;
         int widthCanvasQuad = 193;
-		Debug.Log("ovalor e "+value);
         float heightObjective = heightCanvasQuad * value;
         GameObject[] goList = GameObject.FindGameObjectsWithTag("objective");
-        foreach(GameObject go in goList){
+        foreach (GameObject go in goList)
+        {
             RectTransform rt = go.GetComponent<RectTransform>();
-            rt.sizeDelta = new Vector2(widthCanvasQuad,heightObjective);
+            rt.sizeDelta = new Vector2(widthCanvasQuad, heightObjective);
         }
-        setTextObjective(value,c);
+        setTextObjective(value, c);
 
     }
 
-    private void setTextObjective(float value,Contaminant c ){
+    private void setTextObjective(float value, Contaminant c)
+    {
         GameObject go = GameObject.FindGameObjectWithTag("objectiveText");
-        go.GetComponent<Text>().text ="OBJECTIVE\n"+(value*c.qtdMax).ToString()+" mg/Kg CONCENTRATION";
+        go.GetComponent<Text>().text = manageLanguagePhase.getObjectiveTextPt1() + (value * c.qtdMax).ToString() + manageLanguagePhase.getObjectiveTextPt2();
     }
-    void Start () { }
-    void Update () {
-        
-        if(countPoint == nextValueScale){
-            isScaling=true;
+    void Update()
+    {
+
+        if (countPoint == nextValueScale)
+        {
+            isScaling = true;
         }
 
-        if (isScaling) {
-            if(isFirst){
+        if (isScaling)
+        {
+            if (isFirst)
+            {
                 incrementDayBar();
                 updateScalePoints();
-                isFirst=false;
+                isFirst = false;
             }
             resizeGraph();
-        }else{
-            isFirst=true;
-        }   
+        }
+        else
+        {
+            isFirst = true;
+        }
         updatePercentageContaminant();
-    
+
     }
 
-    private void updatePercentageContaminant(){
+    private void updatePercentageContaminant()
+    {
 
-        if (progressBar.GetComponent<Image> ().fillAmount <= percentageContaminant || modulo ((progressBar.GetComponent<Image> ().fillAmount - percentageContaminant)) < 0.001) {
-            progressBar.GetComponent<Image> ().fillAmount = percentageContaminant;
-        } else {
-            progressBar.GetComponent<Image> ().fillAmount -= 0.001f;
+        if (progressBar.GetComponent<Image>().fillAmount <= percentageContaminant || modulo((progressBar.GetComponent<Image>().fillAmount - percentageContaminant)) < 0.001)
+        {
+            progressBar.GetComponent<Image>().fillAmount = percentageContaminant;
+        }
+        else
+        {
+            progressBar.GetComponent<Image>().fillAmount -= 0.001f;
         }
 
     }
